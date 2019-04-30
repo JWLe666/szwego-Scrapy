@@ -64,9 +64,9 @@ class RenrenSpider(scrapy.Spider):
     
     imgint = 0
     
-    lj = r'E:\代码\共享'
+    lj = ''#爬取到数据要保存的路径
     
-    pp = ['杜嘉班纳','DG','LV','驴家','高田贤三','kenzo','1v','路易威登','D*G','杜家','louis vuitton','Dolce & Gabbana','kz','DG.','Louis Vuitto*','D&G','路易威','L*V路易威登','L*V','kenz*','KEN','L*ouis Vuitton路*易威登','路*易威登','L*ouis Vuitton','LV路易威登','Louis Vuttion','L*ouis V*uitton','驴','路易','驴牌','L@V(路易威@登）','LV(路易威@）','DG（杜嘉班纳）','L# 路易威#','louis vuitton','Louis Vuitto＊??【路易威＊】','Louis Vuiton','LouisVuitton','KENZO','Loui*  Vitto*','LV 路易威*','Dolce&Gabbana','D*olce&G*abbana']#品牌黑名单
+    pp = []#品牌黑名单
     
     shop_hs_list = f1
 
@@ -111,13 +111,10 @@ class RenrenSpider(scrapy.Spider):
             if page1 == 15:
 
                 return
-            #time.sleep(2)
             print('店铺列表第',page1,'页')
-            #https://www.szwego.com/service/album/get_album_list.jsp?act=attention&search_value=&page_index=1&tag_id=&_=1556154364200
-            #https://www.szwego.com/service/album/get_album_list.jsp?act=attention&search_value=&page_index=14&tag_id=&_=1556153911610
+
             yield scrapy.Request(url='https://www.szwego.com/service/album/get_album_list.jsp?act=attention&search_value=&page_index='+str(page1)+'&tag_id=&_='+str(int(round(t * 1000))),cookies = self.cookies,callback=self.shop_text,dont_filter=True)
 
-            #raise SystemExit
 
     #解析店铺数据 获取动态数据
     def shop_text(self,response):
@@ -157,7 +154,6 @@ class RenrenSpider(scrapy.Spider):
             print('动态列表第',page2,'页') 
             
             yield scrapy.Request(url='https://www.szwego.com/service/album/get_album_themes_list.jsp?act=single_album&query_type=new&shop_id='+shop_id+'&search_value=&search_img=&start_date=&end_date=&tag=[]&page_index='+str(page2)+'&from_id=&_='+str(int(round(t * 1000))),cookies = self.cookies,callback=self.dynamic_text,dont_filter=True) 
-            #print('1')
             
     #解析动态数据
     def dynamic_text(self,response):
