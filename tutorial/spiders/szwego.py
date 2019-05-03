@@ -59,29 +59,23 @@ class RenrenSpider(scrapy.Spider):
     global f1
     global dt
     
-    cookies = dt
-    #print(cookies)
+    cookies = dt#cookie
     
-    imgint = 0
+    imgint = 0#总图片数
     
     lj = ''#爬取到数据要保存的路径
     
     pp = []#品牌黑名单
     
-    shop_hs_list = f1
+    shop_hs_list = f1#店铺黑名单
 
-    cp_int = 0
+    cp_int = 0#总产品数（总动态数）
     
-    shop_list = []
-    
-    shop_int = 0
-    
-    jtling = xztime[0]
+    jtling = xztime[0]#时间区间 小的
 
-    jtshier = xztime[1]
-    
-    #tp = The_compression()
-
+    jtshier = xztime[1]#时间区间 大的
+   
+    #破损图片处理 获取完好的图片
     def imgyz(self,urllist):
         dt = []
         for i in urllist:
@@ -132,7 +126,6 @@ class RenrenSpider(scrapy.Spider):
         while True:
 
             if page2 ==  20:
-            #if page == 2:
                 if i == (len(fa)-1):
                     break
                     return
@@ -145,7 +138,7 @@ class RenrenSpider(scrapy.Spider):
             shop_name = fa[i]['shop_name']
             #print(shop_name)
             page2 += 1
-            if shop_name in self.shop_hs_list or shop_name == '我的相册' or shop_name in self.shop_list:
+            if shop_name in self.shop_hs_list or shop_name == '我的相册':
                 i += 1
                 page2 = 0
                 continue
@@ -183,16 +176,9 @@ class RenrenSpider(scrapy.Spider):
 
             dynamic_time_stamp  = i['time_stamp']#动态的时间戳
             shop_name  = i['shop_name']#店铺名称
-            if int(self.jtshier) <= int(dynamic_time_stamp):#大于等于23：59点时间
-                self.shop_list.append(shop_name)
-                break
-                return
-            if int(self.jtling) >= int(dynamic_time_stamp): 
-                self.shop_list.append(shop_name)
-                break
-                return
+            if int(self.jtling) <= int(dynamic_time_stamp) <= int(self.jtshier):
             
-            yield self.os_xz(shop_name,dynamic_time_stamp,dynamic_title,dynamic_imglist) 
+                yield self.os_xz(shop_name,dynamic_time_stamp,dynamic_title,dynamic_imglist)
 
     #创建店铺名称文件夹 创建动态时间戳文件夹 下载动态文案和图片
     def os_xz(self,shop_name,dynamic_time_stamp,dynamic_title,dynamic_imgs):
