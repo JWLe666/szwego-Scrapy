@@ -32,24 +32,19 @@ if time_input == '':
 else:    
     xztime = timeqj(time_input.split(' ')[0],time_input.split(' ')[1])
 
+#获取cookie    
 fb = open('cookie.txt','r').read()
-
 dt = {}
 for ii in fb.split(';'):
     dt[ii.split('=')[0]] = ii.split('=')[1]
-
-#print(dt)
-
+#获取店铺黑名单
 f = open('不常用.txt','r').readlines()
 f1 = []
 for n in f:
     if n != '\n' :
         #print(n)
         kl = n.replace('\n','') 
-           
         f1.append(kl)
-
-#print(type(f))
 
 class RenrenSpider(scrapy.Spider):
     name = "renren"
