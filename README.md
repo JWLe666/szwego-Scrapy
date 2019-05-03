@@ -2,7 +2,7 @@
 使用Scrapy 爬取自己已关注店铺的动态（文案和图片），可以添加店铺黑名单和品牌黑名单，还可以手动设置时间区间
 spiders目录下
 
-/spiders
+/spiders /n
   __init__.py
   cookie.txt
   szwego.py
