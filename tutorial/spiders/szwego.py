@@ -4,7 +4,6 @@ import time
 import requests
 import os
 from scrapy.http import Request
-#from tutorial.compression import The_compression
 
 global false, null, true
 false = null = true = ''
@@ -65,6 +64,8 @@ class RenrenSpider(scrapy.Spider):
     shop_hs_list = f1#店铺黑名单
 
     cp_int = 0#总产品数（总动态数）
+    
+    shop_list  = []#需要跳过的店铺列表,店铺的动态不在时间区间里，跳过该店铺，进行下一个店铺的爬取
     
     jtling = xztime[0]#时间区间 小的
 
@@ -133,7 +134,7 @@ class RenrenSpider(scrapy.Spider):
             shop_name = fa[i]['shop_name']
             #print(shop_name)
             page2 += 1
-            if shop_name in self.shop_hs_list or shop_name == '我的相册':
+            if shop_name in self.shop_hs_list or shop_name == '我的相册' or shop_name in self.shop_list:
                 i += 1
                 page2 = 0
                 continue
@@ -174,6 +175,10 @@ class RenrenSpider(scrapy.Spider):
             if int(self.jtling) <= int(dynamic_time_stamp) <= int(self.jtshier):
             
                 yield self.os_xz(shop_name,dynamic_time_stamp,dynamic_title,dynamic_imglist)
+                
+            elif  int(self.jtling) > int(dynamic_time_stamp):
+                self.shop_list.append(shop_name)
+                return                
 
     #创建店铺名称文件夹 创建动态时间戳文件夹 下载动态文案和图片
     def os_xz(self,shop_name,dynamic_time_stamp,dynamic_title,dynamic_imgs):
