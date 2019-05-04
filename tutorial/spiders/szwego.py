@@ -21,7 +21,6 @@ def timeqj(now_str1,now_str2):
 
     return timeStamp,timeStamp1
 now = time.strftime("%Y-%m-%d", time.localtime())
-#xztime = timeqj(now,now)
 #('1554480000000', '1554566399999')
 print('请输入时间区间,如2019-04-08 2019-04-09以空格分开,然后按回车即可。不输入就直接回车,默认时间区间是今天。时间区间最好是最近的')
 time_input = input()
@@ -113,7 +112,6 @@ class RenrenSpider(scrapy.Spider):
         if jxshop["result"]["shop_list"] == []:
             return
             
-        #print(jxshop) 
            
         fa = jxshop["result"]["shop_list"]
         i = 0            
@@ -123,7 +121,6 @@ class RenrenSpider(scrapy.Spider):
 
             if page2 ==  20:
                 if i == (len(fa)-1):
-                    break
                     return
                     
                 i += 1
@@ -136,6 +133,8 @@ class RenrenSpider(scrapy.Spider):
             page2 += 1
             if shop_name in self.shop_hs_list or shop_name == '我的相册' or shop_name in self.shop_list:
                 i += 1
+                if i == (len(fa)-1):
+                    return                
                 page2 = 0
                 continue
     
